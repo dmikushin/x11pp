@@ -40,7 +40,7 @@ namespace WindowManager
         WindowMgrLib();
         ~WindowMgrLib();
 
-        Window GetWindowHandle(std::string windowName, int width, int height);
+        Window GetWindowHandle(std::string windowName, int width=0, int height=0);
 
         /* Raise the Window. */
         void RaiseWindow(Window window);
