@@ -1,23 +1,11 @@
-PROJECT(WindowMgr)
-
 cmake_minimum_required(VERSION 3.10)
+project(x11pp LANGUAGES CXX)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -std=c++11  -fpermissive -Wno-deprecated-declarations -Wno-deprecated -Wno-conversion-null")
 
-file(GLOB SOURCES
-     "include/*.h"
-     "src/*.cpp")
+add_library(${PROJECT_NAME} SHARED src/${PROJECT_NAME}.cpp)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE X11 Xrandr xcb)
 
-
-include_directories(.)
-include_directories(./include/)
-
-set(WINDOWMANAGER_TARGET "WindowMgr")
-
-set(GCC_COMPILE_FLAGS "${GCC_COMPILE_FLAGS}  -std=c++11  -fpermissive -Wno-deprecated-declarations -Wno-deprecated -Wno-conversion-null")
-
-set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COMPILE_FLAGS}" )
-
-add_executable(${WINDOWMANAGER_TARGET} ${SOURCES})
-
-
-target_link_libraries(${WINDOWMANAGER_TARGET} X11 Xrandr xcb)
+add_executable(${PROJECT_NAME}_test src/${PROJECT_NAME}_test.cpp)
+target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME})

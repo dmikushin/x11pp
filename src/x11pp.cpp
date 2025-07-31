@@ -1,4 +1,4 @@
-#include "WindowMgrLib.h"
+#include "x11pp.h"
 
 #include <iostream>
 #include <string.h>
@@ -7,7 +7,7 @@
 #include <limits.h>
 #include <string>
 
-using namespace WindowManager;
+namespace x11pp {
 
 screenInfo::screenInfo(char *name, unsigned int width, unsigned int height, int x, int y) : Name(name),
                                                                                             Width(width), Height(height), X(x), Y(y)
@@ -23,16 +23,16 @@ int catch_error(Display *display, XErrorEvent *e)
     return 0;
 }
 
-WindowMgrLib::WindowMgrLib()
+x11pp::x11pp::x11pp()
 {
     
 }
 
-WindowMgrLib::~WindowMgrLib()
+x11pp::x11pp::~x11pp()
 {
 }
 
-Window WindowMgrLib::GetWindowHandle(std::string windowName, int width, int height)
+Window x11pp::GetWindowHandle(std::string windowName, int width, int height)
 {
     Display *display = XOpenDisplay(NULL);
 
@@ -44,7 +44,7 @@ Window WindowMgrLib::GetWindowHandle(std::string windowName, int width, int heig
     return rv;
 }
 
-void WindowMgrLib::RaiseWindow(Window window)
+void x11pp::RaiseWindow(Window window)
 {
     printf("raise_window.....\n");
     Display *display = XOpenDisplay(NULL);
@@ -55,7 +55,7 @@ void WindowMgrLib::RaiseWindow(Window window)
 }
 
 /* Lower the Window. */
-void WindowMgrLib::LowerWindow(Window window)
+void x11pp::LowerWindow(Window window)
 {
     printf("lower_window.....\n");
     Display *display = XOpenDisplay(NULL);
@@ -66,7 +66,7 @@ void WindowMgrLib::LowerWindow(Window window)
 }
 
 /* Show Window. */
-void WindowMgrLib::ShowWindow(Window window)
+void x11pp::ShowWindow(Window window)
 {
     printf("map_window.....\n");
     Display *display = XOpenDisplay(NULL);
@@ -77,7 +77,7 @@ void WindowMgrLib::ShowWindow(Window window)
 }
 
 /* Hide Window. */
-void WindowMgrLib::HideWindow(Window window)
+void x11pp::HideWindow(Window window)
 {
     printf("unmap_window.....\n");
     Display *display = XOpenDisplay(NULL);
@@ -87,7 +87,7 @@ void WindowMgrLib::HideWindow(Window window)
     XCloseDisplay(display);
 }
 
-void WindowMgrLib::MoveWindow(Window window, int x, int y)
+void x11pp::MoveWindow(Window window, int x, int y)
 {
     Display *display = XOpenDisplay(NULL);
     XSetErrorHandler(catch_error);
@@ -96,7 +96,7 @@ void WindowMgrLib::MoveWindow(Window window, int x, int y)
     XCloseDisplay(display);
 }
 
-void WindowMgrLib::ResizeWindow(Window window, int w, int h)
+void x11pp::ResizeWindow(Window window, int w, int h)
 {
     Display *display = XOpenDisplay(NULL);
     XSetErrorHandler(catch_error);
@@ -105,7 +105,7 @@ void WindowMgrLib::ResizeWindow(Window window, int w, int h)
     XCloseDisplay(display);
 }
 
-int WindowMgrLib::MaximizeWindow(Window window)
+int x11pp::MaximizeWindow(Window window)
 {
     Display *display = XOpenDisplay(NULL);
     XClientMessageEvent ev = {};
@@ -133,7 +133,7 @@ int WindowMgrLib::MaximizeWindow(Window window)
     return rv;
 }
 
-void WindowMgrLib::RemoveWindowDecoration(Window window)
+void x11pp::RemoveWindowDecoration(Window window)
 {
 
     Display *display = XOpenDisplay(NULL);
@@ -162,7 +162,7 @@ void WindowMgrLib::RemoveWindowDecoration(Window window)
     XCloseDisplay(display);
 }
 
-MotifWmHints *WindowMgrLib::get_motif_wm_hints(Display *display, Window window)
+MotifWmHints *x11pp::get_motif_wm_hints(Display *display, Window window)
 {
     Atom property;
     int result;
@@ -198,7 +198,7 @@ MotifWmHints *WindowMgrLib::get_motif_wm_hints(Display *display, Window window)
     return NULL;
 }
 
-std::vector<screenInfo> WindowMgrLib::GetScreenInfo()
+std::vector<screenInfo> x11pp::GetScreenInfo()
 {
     std::vector<screenInfo> screens;
 
@@ -239,7 +239,7 @@ std::vector<screenInfo> WindowMgrLib::GetScreenInfo()
     return screens;
 }
 
-Window WindowMgrLib::EnumerateWindows(Display *display, Window rootwindow, char *window_name, int window_width, int window_height)
+Window x11pp::EnumerateWindows(Display *display, Window rootwindow, char *window_name, int window_width, int window_height)
 {
     Window retWindow = 0, root, parent, *children;
     unsigned children_count;
@@ -295,3 +295,5 @@ Window WindowMgrLib::EnumerateWindows(Display *display, Window rootwindow, char 
 
     return retWindow;
 }
+
+} // namespace x11pp
