@@ -23,9 +23,13 @@ int catch_error(Display *display, XErrorEvent *e)
     return 0;
 }
 
-x11pp::x11pp::x11pp()
+x11pp::x11pp::x11pp() : display_name(nullptr)
 {
     
+}
+
+x11pp::x11pp::x11pp(const char* display) : display_name(display)
+{
 }
 
 x11pp::x11pp::~x11pp()
@@ -34,7 +38,7 @@ x11pp::x11pp::~x11pp()
 
 Window x11pp::GetWindowHandle(std::string windowName, int width, int height)
 {
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
 
     int screen = XDefaultScreen(display);
     Window root = XRootWindow(display, screen);
@@ -47,7 +51,7 @@ Window x11pp::GetWindowHandle(std::string windowName, int width, int height)
 void x11pp::RaiseWindow(Window window)
 {
     printf("raise_window.....\n");
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
     XSetErrorHandler(catch_error);
     XRaiseWindow(display, window);
     XFlush(display);
@@ -58,7 +62,7 @@ void x11pp::RaiseWindow(Window window)
 void x11pp::LowerWindow(Window window)
 {
     printf("lower_window.....\n");
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
     XSetErrorHandler(catch_error);
     XLowerWindow(display, window);
     XFlush(display);
@@ -69,7 +73,7 @@ void x11pp::LowerWindow(Window window)
 void x11pp::ShowWindow(Window window)
 {
     printf("map_window.....\n");
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
     XSetErrorHandler(catch_error);
     XMapWindow(display, window);
     XFlush(display);
@@ -80,7 +84,7 @@ void x11pp::ShowWindow(Window window)
 void x11pp::HideWindow(Window window)
 {
     printf("unmap_window.....\n");
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
     XSetErrorHandler(catch_error);
     XUnmapWindow(display, window);
     XFlush(display);
@@ -89,7 +93,7 @@ void x11pp::HideWindow(Window window)
 
 void x11pp::MoveWindow(Window window, int x, int y)
 {
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
     XSetErrorHandler(catch_error);
     XMoveWindow(display, window, x, y);
     XFlush(display);
@@ -98,7 +102,7 @@ void x11pp::MoveWindow(Window window, int x, int y)
 
 void x11pp::ResizeWindow(Window window, int w, int h)
 {
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
     XSetErrorHandler(catch_error);
     XResizeWindow(display, window, w, h);
     XFlush(display);
@@ -107,7 +111,7 @@ void x11pp::ResizeWindow(Window window, int w, int h)
 
 int x11pp::MaximizeWindow(Window window)
 {
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
     XClientMessageEvent ev = {};
     Atom wmState = XInternAtom(display, "_NET_WM_STATE", False);
     Atom maxH = XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
@@ -136,7 +140,7 @@ int x11pp::MaximizeWindow(Window window)
 void x11pp::RemoveWindowDecoration(Window window)
 {
 
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
     MotifWmHints *hints;
     Atom property;
     int nelements;
@@ -202,7 +206,7 @@ std::vector<screenInfo> x11pp::GetScreenInfo()
 {
     std::vector<screenInfo> screens;
 
-    Display *display = XOpenDisplay(NULL);
+    Display *display = XOpenDisplay(display_name);
 
     if (NULL == display)
     {

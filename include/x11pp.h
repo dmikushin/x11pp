@@ -35,9 +35,11 @@ class x11pp
 
 private:
     MotifWmHints *get_motif_wm_hints(Display *display, Window window);
+    const char* display_name;
 
 public:
     x11pp();
+    x11pp(const char* display);
     ~x11pp();
 
     Window GetWindowHandle(std::string windowName, int width=0, int height=0);
